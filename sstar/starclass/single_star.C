@@ -727,8 +727,10 @@ real single_star::accretion_limit(const real mdot, const real dt) {
   accretion = max(accretion, 0.);
   real mdot_max = mdot_kh*pow(accretion, 1./expansionA(relative_mass));
   mdot_max = max(mdot_max, 0.);	
+
   return min(mdot, mdot_max);
 
+//  return 0.5*mdot;
 
   // (SPZ+GN: 26 Jul 2000) Test Kelvin Helmholtz accretion
   // (GN Jul 28 1999) test non conservative Algol evolution

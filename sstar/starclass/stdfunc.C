@@ -432,6 +432,31 @@ real random_verbunt_velocity() {
    }
 }
 
+// Igoshev 2020, MNRAS, 494, 3 - combination of two maxwellians
+real random_igoshev_velocity() {
+
+    real prob = randinter(0., 1.);
+    if (prob <= 0.2 ) {
+         return random_maxwellian_velocity(56*sqrt(3.));
+    } else {
+	 return random_maxwellian_velocity(336*sqrt(3.));
+    }
+}
+
+// general combination of two Maxwellians accesible as an argument in the command line
+real random_twoMaxwellian(real w_disp, real v_disp1, real v_disp2) {
+
+    //cerr<<"random_twoMaxwellian "<< w_disp << "\t" << v_disp1 <<"\t" << v_disp2 <<endl;
+
+    real prob = randinter(0., 1.);
+    if (prob <= w_disp ) {
+         return random_maxwellian_velocity(v_disp1*sqrt(3.));
+    } else {
+	 return random_maxwellian_velocity(v_disp2*sqrt(3.));
+    }
+
+
+}
   
 
 real paczynski_distribution(const real velocity, const real v_disp) {

@@ -97,18 +97,22 @@ PRC(pk);
     switch(pk) {
     case no_velocity_kick:              return 0;
              break;                                
-	case Maxwellian_velocity_kick:      return random_maxwellian_velocity(v_disp);
+    case Maxwellian_velocity_kick:      return random_maxwellian_velocity(v_disp);
              break;
-	case Paczynski_velocity_kick:       return random_paczynski_velocity(v_disp);
+    case Paczynski_velocity_kick:       return random_paczynski_velocity(v_disp);
              break;
     case Hobbs_velocity_kick:      return random_hobbs_velocity();
             break;
-	case Arzoumanian_velocity_kick:      return random_arzoumanian_velocity();
+    case Arzoumanian_velocity_kick:      return random_arzoumanian_velocity();
             break;
-    case internally_decided_velocity_kick:		    
-	case Verbunt_velocity_kick:      return random_verbunt_velocity();
+//    case internally_decided_velocity_kick:		    
+    case Verbunt_velocity_kick:      return random_verbunt_velocity();
             break;
-	case delta_function_velocity_kick:  return v_disp;
+    case Igoshev_velocity_kick:      return random_igoshev_velocity();
+	    break;
+    case twoMaxwellian:              return random_twoMaxwellian(w_disp, v_disp1, v_disp2);
+            break;
+    case delta_function_velocity_kick:  return v_disp;
              break;
     default:
 	     cerr << "\nNo recognized option in "

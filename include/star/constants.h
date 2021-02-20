@@ -137,6 +137,8 @@ enum super_nova_kick_distribution {internally_decided_velocity_kick,
                    Hobbs_velocity_kick,
                    Arzoumanian_velocity_kick,
                    Verbunt_velocity_kick,
+                   Igoshev_velocity_kick,
+                   twoMaxwellian,
 				   delta_function_velocity_kick
                    };
 
@@ -199,12 +201,19 @@ extern
 class stellar_evolution_constants {  // Easy to have a name for compiling.
   public:
   stellar_evolution_constants() {
-    pk = internally_decided_velocity_kick;
-    v_disp = 600;    
+      pk = twoMaxwellian;
+//    pk = Igoshev_velocity_kick;
+//    pk = internally_decided_velocity_kick;
+//    pk = no_velocity_kick;
+//      pk = Hobbs_velocity_kick;
+    v_disp = 265;    
   }
 
   super_nova_kick_distribution pk;
   real v_disp;
+  real v_disp1;
+  real v_disp2;
+  real w_disp;
 
   real mathematics(mathematical_constant);
   real physics(physics_constants);

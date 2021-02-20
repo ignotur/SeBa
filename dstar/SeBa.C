@@ -200,6 +200,8 @@ int main(int argc, char ** argv) {
     bool P_flag = false;
     bool U_flag = false;
     bool G_flag = false;
+    bool k_flag = false;
+
 
     bool stop_at_merger_or_disruption = false;
     bool stop_at_remnant_formation = false;
@@ -223,6 +225,9 @@ int main(int argc, char ** argv) {
     real t_hc = 1;
     real metal = cnsts.parameters(Zsun);
 
+    real w_kick  = 0.2;  // if parameters are not given, we use the two Maxwellian kick as in Igoshev (2020), MNRAS, 494, 3
+    real v_kick1 = 56.0; 
+    real v_kick2 = 336.0; 
 
     char *mfc = new char[64];
     mass_function mf = mf_Power_Law;
@@ -263,7 +268,7 @@ int main(int argc, char ** argv) {
 
     extern char *poptarg;
     int c;
-    const char *param_string = "n:N:RDSM:m:x:F:f:A:a:y:G:g:E:e:v:U:u:Q:q:T:t:I:O:w:P:p:n:s:z:c:";
+    const char *param_string = "n:N:RDSM:m:x:F:f:A:a:y:G:g:E:e:v:U:u:Q:q:T:t:I:O:w:P:p:n:s:z:c:kb:B:C:";
 
     while ((c = pgetopt(argc, argv, param_string)) != -1)
 	switch(c) {
@@ -334,6 +339,14 @@ int main(int argc, char ** argv) {
 		      break;
            case 'z': metal = atof(poptarg);
                 break;
+           case 'k': k_flag = true; 
+                break;
+           case 'C': w_kick = atof(poptarg);
+                break;
+           case 'b': v_kick1 = atof(poptarg);
+                break;
+           case 'B': v_kick2 = atof(poptarg);
+                break;
            case 'c': strcpy(star_type_string, poptarg);
 	           type = extract_stellar_type_string(star_type_string);
                 break;
@@ -349,6 +362,18 @@ int main(int argc, char ** argv) {
 	    cnsts.parameters(envelope_binding_energy),
 	    cnsts.parameters(specific_angular_momentum_loss),
 	    cnsts.parameters(dynamic_mass_transfer_gamma));
+
+    if (k_flag) {
+
+        cnsts.w_disp  = w_kick;
+        cnsts.v_disp1 = v_kick1;
+        cnsts.v_disp2 = v_kick2;
+
+        cerr << "Natal kick is chosen in form of sum two Maxwellians" << endl;
+        cerr << "with parameters: "<<cnsts.w_disp << "\t"<<cnsts.v_disp1 << "\t" << cnsts.v_disp2 << endl;
+
+    }
+
 
     if (n <= 0) err_exit("mknodes: N > 0 required!");
 

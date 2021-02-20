@@ -41,6 +41,9 @@
 	   real random_hobbs_velocity();
 	   real random_arzoumanian_velocity();
 	   real random_verbunt_velocity();
+	   real random_igoshev_velocity();
+           real random_twoMaxwellian(real, real, real);
+
        
        real gravitational_focussed_velocity(const real, const real,
                                             const real, const real,

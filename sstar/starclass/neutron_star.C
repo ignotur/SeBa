@@ -339,7 +339,7 @@ bool neutron_star::super_nova() {
      real v_kick     = cnsts.super_nova_kick(); //random_kick();
      real theta_kick = acos(1-2*random_angle(0, 1));
      real phi_kick   = random_angle(0, 2*PI);
-//     cerr << "Supernova kick v = " << v_kick << " [km/s]" << endl;
+     cerr << "Supernova kick v = " << v_kick << " [km/s]" << endl;
 
       // Transform 1D kick velocity to 3D space velocity for dynamics.
      real x_kick = v_kick*sin(theta_kick)*cos(phi_kick);
@@ -419,7 +419,13 @@ bool neutron_star::super_nova() {
         
                     if (pericenter <= get_companion()->get_radius())
         	      hit_companion = TRUE;
-        	    
+      
+		    std::ofstream outfile;
+		    outfile.open("bound_NS.txt", std::ios_base::app); 
+	 	    cout << "NS formation (bound): v_kick = " << v_kick << "\t v_cm " << v_cm << endl; 
+                    outfile << get_binary()->get_identity() << "\t" << identity << "\t" << v_kick << "\t" << v_cm << endl;
+                    outfile.close();
+ 	    
         	  }
         	  else {
                     set_spec_type(Runaway);
@@ -454,10 +460,18 @@ bool neutron_star::super_nova() {
                     v_sn = sqrt(pow(v_sn, 2) + pow(v_cm, 2)
                          + 2*v_sn*v_cm*cos(theta_kick));
                     velocity = v_sn;
+
+		    std::ofstream outfile;
+                    outfile.open("unbound_NS.txt", std::ios_base::app);
+	            cout << "NS formation (unbound): v_kick = " << v_kick << "\t v_sn = "<< v_sn << "\t v_comp "<< v_comp << "\t v_cm " << v_cm << "\t identity"<< identity << "\t identity binary "<< get_binary()->get_identity()<< endl; 
+                    outfile << get_binary()->get_identity() << "\t" << identity << "\t" << v_kick << "\t" << v_sn << "\t" << v_comp << '\t' << current_time <<endl;
+                    outfile.close();
+
             }
           } // !merged or !disrupted  
       } // binary component
       envelope_mass = 0;
+
 
      return hit_companion;
 }
@@ -610,10 +624,21 @@ real neutron_star::neutron_star_mass(stellar_type stp) {
 // Changes by Andrei Igoshev, 2020
 // Implementing the dependance from Fryer et al. 2012, ApJ 749, delayed model
 
+      cout << "Mass used in calculations for NS mass is: "<<m<<endl;
+
       real Z = metalicity;
       real mass = 1.1 + 0.2 * exp((m - 11.0)/4.0) - (2.0 + Z) * exp(0.4*(m - 26.0));
 
-  return min(mass, get_total_mass());
+   return min(mass, get_total_mass());
+
+    // Implementing the Antoniadis et al. (2016) bimodal mass distribution
+
+//    real prb = randinter(0.0,1.0);
+//    if (prb > 0.425) 
+//	return 1.393 + 0.064 * gauss();
+//    else
+//	return 1.807 + 0.178 * gauss();
+
 }
 
 //Assuming a Newtonian Polytrope with n= 3/2
